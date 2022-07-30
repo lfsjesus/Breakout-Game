@@ -7,13 +7,14 @@ pygame.init()
 pygame.mixer.init()
 
 #Game Sounds
+hit = pygame.mixer.Sound("hit.wav")
 music = pygame.mixer.music.load("Alla-Turca.mp3") 
-pygame.mixer.music.play(-1, 0, 0)
+pygame.mixer.music.play(-1)
 
-screen_width = 1000
-screen_height = 600
+screen_width = 1200
+screen_height = 700
 background = (0, 0, 0)
-fps = 60
+fps = 105
 clock = pygame.time.Clock()
 screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption('Breakout')
@@ -140,6 +141,7 @@ class ball():
             for bl in row:
                 #checking collision
                 if self.rect.colliderect(bl[0]):
+                    hit.play()
                     #from above
                     if abs(self.rect.bottom - bl[0].top) < tolerance and self.speed_y > 0:
                         self.speed_y *= -1
@@ -231,30 +233,35 @@ while run:
         game_over = game_ball.move()
         if game_over != 0:
             ball_exists = False
+            game_ball.reset(player_paddle.x + player_paddle.width // 2, player_paddle.y - player_paddle.height)
+            player_paddle.reset()
     
     #info for the player
     if not ball_exists:
+        if pygame.key.get_pressed()[pygame.K_LEFT]  and player_paddle.rect.left > 0:
+                game_ball.rect.x -= player_paddle.speed
+                game_ball.direction = -1
+        elif pygame.key.get_pressed()[pygame.K_RIGHT] and player_paddle.rect.right < screen_width:
+                game_ball.rect.x += player_paddle.speed
+                game_ball.direction = 1
+        player_paddle.move()
+
         if game_over == 0:
-            show_text("Click Anywhere to Start", font, txt_col, 340, screen_height // 2 + 100)
+            show_text("Use the <- arrows -> and Press [SPACE] to Start", font, txt_col, 215, screen_height // 2 + 100)
         elif game_over == 1:
             show_text("YOU WON", font, txt_col, 420, screen_height // 2 + 50)
             show_text("Click Anywhere to Start", font, txt_col, 340, screen_height // 2 + 100)
-            paddle_col = (0, 0, 0)
-            paddle_outline = (0, 0, 0)
+            
         elif game_over == -1:
             show_text("YOU LOST", font, txt_col, 420, screen_height // 2 + 50)
             show_text("Click Anywhere to Start", font, txt_col, 340, screen_height // 2 + 100)
-            paddle_col = (0, 0, 0)
-            paddle_outline = (0, 0, 0)
-        already_started = True
+            
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
-        if event.type == pygame.MOUSEBUTTONDOWN and ball_exists == False:
+        if pygame.key.get_pressed()[pygame.K_SPACE] and ball_exists == False:                
             ball_exists = True
-            game_ball.reset(player_paddle.x + player_paddle.width // 2, player_paddle.y - player_paddle.height)
-            player_paddle.reset()
             paddle_col = (255, 255, 255)
             paddle_outline = (200, 100, 100)
             wall.create_wall()
