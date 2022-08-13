@@ -247,14 +247,14 @@ while run:
         player_paddle.move()
 
         if game_over == 0:
-            show_text("Use the <- arrows -> and Press [SPACE] to Start", font, txt_col, 215, screen_height // 2 + 100)
+            show_text("Use the <- arrows -> and Press [SPACE] to Start", font, txt_col, 300, screen_height // 2 + 100)
         elif game_over == 1:
-            show_text("YOU WON", font, txt_col, 420, screen_height // 2 + 50)
-            show_text("Click Anywhere to Start", font, txt_col, 340, screen_height // 2 + 100)
+            show_text("YOU WON", font, txt_col, 530, screen_height // 2 + 50)
+            show_text("Click Anywhere to Start", font, txt_col, 460, screen_height // 2 + 100)
             
         elif game_over == -1:
-            show_text("YOU LOST", font, txt_col, 420, screen_height // 2 + 50)
-            show_text("Click Anywhere to Start", font, txt_col, 340, screen_height // 2 + 100)
+            show_text("YOU LOST", font, txt_col, 530, screen_height // 2 + 50)
+            show_text("Click Anywhere to Start", font, txt_col, 460, screen_height // 2 + 100)
             
 
     for event in pygame.event.get():
